@@ -92,15 +92,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         //设置密码，要进行MD5加密
         employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
 
-        //设置时间
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
-
-        //设置记录创建人ID和修改人ID（其实就是登录用户的ID（但在这里获取不到）
-
-
-        employee.setCreateUser(BaseContext.getCurrentId());
-        employee.setUpdateUser(BaseContext.getCurrentId());
+        //设置创建时间和修改时间
+        //设置创建人和修改人
+        //通过AutoFill机制自动填充
 
         employeeMapper.insert(employee);
     }
@@ -143,6 +137,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         //employee.setStatus(status);
 
         //builder方法
+        //hahaha我说这怎么没写呢
         Employee employee = Employee.builder().id(id).status(status).build();
 
         employeeMapper.update(employee);
@@ -177,9 +172,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         //对象属性拷贝
         BeanUtils.copyProperties(employeeDTO, employee);
         //设置修改时间和修改人
-        employee.setUpdateTime(LocalDateTime.now());
-        employee.setUpdateUser(BaseContext.getCurrentId());
+        //通过AutoFill机制自动填充
 
+        
         //调用持久层
         employeeMapper.update(employee);
     }
