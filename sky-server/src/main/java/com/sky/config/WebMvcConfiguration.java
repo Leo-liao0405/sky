@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.http.converter.cbor.MappingJackson2CborHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
@@ -72,10 +73,6 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         registry.addResourceHandler("/doc.html").addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
-
-
-
-
     /*
      * 扩展springmvc消息转换器
      * @param converters
@@ -83,7 +80,9 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     protected void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         log.info("扩展消息转换器...");
         //自己创建一个消息转换器对象
-        MappingJackson2CborHttpMessageConverter converter = new MappingJackson2CborHttpMessageConverter();
+        //第一行代码是要在物联网/二进制高效传输场景使用的工具，这个项目用不到就不加了
+        //MappingJackson2CborHttpMessageConverter converter = new MappingJackson2CborHttpMessageConverter();
+        MappingJackson2HttpMessageConverter converter =  new MappingJackson2HttpMessageConverter();
         // 需要为消息转换器设置对象转换器，将java对象序列化为json数据
         // common中已经实装好了对象转换器，这里直接使用就行，可以去看就是把日期进行转换
         // 而且将转换格式也定义为了一个常量
@@ -91,5 +90,6 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         // 把消息转换器加到容器中
         // 容器里自带了消息转换器，且有顺序，要优先使用自己的转换器就要把它放在最前面
         converters.add(0,converter);
+
     }
 }

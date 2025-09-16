@@ -20,6 +20,7 @@ import com.sky.mapper.EmployeeMapper;
 import com.sky.service.EmployeeService;
 
 import java.util.List;
+
 import java.time.LocalDateTime;
 import java.io.ObjectInputFilter.Status;
 import org.springframework.beans.BeanUtils;
@@ -124,5 +125,28 @@ public class EmployeeServiceImpl implements EmployeeService {
         long total = page.getTotal();
         List<Employee> records = page.getResult();
         return new PageResult(total, records);
+    }
+
+
+    /**
+     * 启用禁用员工
+     * @param status
+     * @param id
+     */
+    public void startOrStop(Integer status, Long id) {
+        // update employee set status = ? where id = ?
+
+
+        // 传统方法
+        //Employee employee = new Employee();
+        //employee.setId(id);
+        //employee.setStatus(status);
+
+        //builder方法
+        Employee employee = Employee.builder().id(id).status(status).build();
+
+        employeeMapper.update(employee);
+
+        return;
     }
 }
